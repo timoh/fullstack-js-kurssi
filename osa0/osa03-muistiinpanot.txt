@@ -1,0 +1,35 @@
+title 0.3 muistiinpanojen sivu
+
+kayttaja->selain: osoiteriville: /notes
+selain->palvelin: GET fullstack-exampleapp.herokuapp.com/notes
+palvelin->selain: status 200, sivun HTML-koodi
+
+selain->palvelin: GET /main.css
+selain->palvelin: GET /main.js
+
+palvelin->selain: status 200, main.js sekä main.css
+selain->kayttaja: HTML ilman dataa sekä main.js ja main.css
+
+note right of selain
+  main.js sisältää käskyn tehdä AJAX kutsun 
+  jossa ladataan data.json
+end note
+
+selain->palvelin: GET /data.json
+palvelin->selain: status 200, data.json
+
+note right of selain
+  data.json sisältää JS-olioita joissa on sisältö 
+  (content) sekä päiväys (date)
+end note
+
+
+selain->kayttaja: nyt myös data 
+
+note left of selain
+  muotoiltu bullet-listaksi eli 
+  <ul>
+    <li>...</li>
+  </ul>
+end note
+
