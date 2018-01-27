@@ -1,0 +1,23 @@
+title 0.6 uusi muistiipano spa:ssa
+
+kayttaja->selain: tekstiä input-kenttään ja submit-napin painallus
+selain->palvelin: XHR POST fullstack-exampleapp.herokuapp.com/new_note_spa
+note right of selain
+  "request payload" sisältää JS-objektin,
+  jossa uuden muistiinpanon sisältö
+end note
+palvelin->selain: status 201, vastaus: JS-objekti
+note right of selain
+  JS-objektin sisältö:
+  {"message":"note created"}
+end note
+
+selain->kayttaja: uusi muistiinpano lisätään DOMiin
+
+note left of selain
+  uusi muistiinpano lisätään <ul>-listan osaksi
+  uutena 
+    <li>...</li>
+  elementtinä
+end note
+
