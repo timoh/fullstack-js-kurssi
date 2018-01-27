@@ -1,0 +1,47 @@
+title 0.4 uusi muistiinpano
+
+kayttaja->selain: tekstiä input-kenttään ja submit-napin painallus
+selain->palvelin: POST fullstack-exampleapp.herokuapp.com/new_note
+note right of selain
+  "form data" sisältää kentän "note", jossa on 
+  uuden muistiinpanon sisältö
+end note
+palvelin->selain: status 302, location: /notes
+
+note right of selain
+  uudelleenohjaus takaisin osoitteeseen /notes
+  ja edellisen tehtävän sisältämät asiat ladataan uudestaan
+end note
+
+selain->palvelin: GET /notes
+selain->palvelin: GET /main.css
+selain->palvelin: GET /main.js
+
+palvelin->selain: status 200, main.js sekä main.css
+selain->kayttaja: HTML ilman dataa sekä main.js ja main.css
+
+note right of selain
+  main.js sisältää käskyn tehdä AJAX kutsun 
+  jossa ladataan data.json
+end note
+
+selain->palvelin: GET /data.json
+palvelin->selain: status 200, data.json
+
+note right of selain
+  data.json sisältää JS-olioita joissa on sisältö 
+  (content) sekä päiväys (date)
+  ..nyt myös sisältäen juuri lisäämämme muistiinpanon
+  sekä palvelimen generoiman data-kentän sille
+end note
+
+
+selain->kayttaja: nyt myös data 
+
+note left of selain
+  muotoiltu bullet-listaksi eli 
+  <ul>
+    <li>...</li>
+  </ul>
+end note
+
