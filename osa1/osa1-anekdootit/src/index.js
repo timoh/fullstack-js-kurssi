@@ -5,7 +5,8 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selected: 0
+      selected: 0,
+      votes: {}
     }
   }
 
@@ -15,26 +16,57 @@ class App extends React.Component {
 
   nextAnecdote = () => {
     const idx = this.indexRandomAnecdote()
-    
+
     // const newAnecdote = anecdotes[idx]
     // console.log("uusi anekdootti numerolla ",idx," ",newAnecdote)
 
     this.setState({selected: idx})
   }
 
+  voteCurrentAnecdote = () => {
+    const key = this.state.selected
+
+    const uusiVotes = this.state.votes
+    if (uusiVotes[key] === undefined) {
+        uusiVotes[key] = 1
+    } else {
+        uusiVotes[key] = uusiVotes[key] + 1
+    }
+    
+    // console.log("päivitetty votes:", uusiVotes)
+
+    this.setState({votes: uusiVotes})
+  }
+
   render() {
-    return (
-      <div>
-        {this.props.anecdotes[this.state.selected]}
-
-        <div>
-          <button onClick={this.nextAnecdote}>next anecdote</button>
-        </div>
-
-      </div>
-
-
-    )
+      if (this.state.votes[this.state.selected] === undefined){
+        return (
+            <div>
+              <p>{this.props.anecdotes[this.state.selected]}</p>
+              <p>has 0 votes</p>
+      
+              <div>
+                <button onClick={this.voteCurrentAnecdote}>vote</button>
+                <button onClick={this.nextAnecdote}>next anecdote</button>
+              </div>
+      
+            </div>
+          )
+      } else {
+        return (
+            <div>
+              <p>{this.props.anecdotes[this.state.selected]}</p>
+              <p>has {this.state.votes[this.state.selected]} votes</p>
+      
+              <div>
+                <button onClick={this.voteCurrentAnecdote}>vote</button>
+                <button onClick={this.nextAnecdote}>next anecdote</button>
+              </div>
+      
+            </div>      
+          )
+      }
+    
   }
 }
 
