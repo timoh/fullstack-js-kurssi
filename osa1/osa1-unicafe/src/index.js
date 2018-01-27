@@ -30,6 +30,7 @@ class App extends React.Component {
     }
   }
 
+
   render() {
 
     const AnnaPalautetta = () => {
@@ -46,6 +47,26 @@ class App extends React.Component {
     }
   
     const Statistiikka = () => {
+
+
+      const summa = () => 1*this.state.hyva + 0*this.state.neutraali + -1*this.state.huono
+      const lkm = () => this.state.hyva + this.state.neutraali + this.state.huono
+      
+      const keskiarvo = () => {
+        if (lkm() === 0) {
+          return 0
+        } else {
+          return Number.parseFloat(summa()/lkm()).toPrecision(1)
+        }
+      }
+
+      const positiivisia = () => {
+        if (lkm() === 0) {
+          return 0
+        } else {
+          return Number.parseFloat(this.state.hyva/lkm()*100).toPrecision(3)
+        }
+      }
   
       return (
         <div>
@@ -53,7 +74,14 @@ class App extends React.Component {
           <p>hyvä {this.state.hyva}</p>
           <p>neutraali {this.state.neutraali}</p>
           <p>huono {this.state.huono}</p>
+
+          <div>
+            <p>keskiarvo {keskiarvo()}</p>
+            <p>positiivisia {positiivisia()} %</p>
+          </div>
         </div>
+
+
       )
     
     }
