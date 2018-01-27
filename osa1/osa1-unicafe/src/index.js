@@ -66,7 +66,13 @@ class App extends React.Component {
       const Statistic = (props) => { 
 
           return(
-            <p>{props.teksti} {props.arvo} {props.yksikko}</p>
+            <tr>
+
+              <td>{props.teksti}</td>
+              <td>{props.arvo}</td>
+              <td>{props.yksikko}</td>
+
+            </tr>
           )
 
       }
@@ -85,14 +91,19 @@ class App extends React.Component {
         return (
           <div>
             <h2>statistiikka</h2>
-            <Statistic teksti="hyvä" arvo={this.state.palautteet.hyva} yksikko="" />
-            <Statistic teksti="neutraali" arvo={this.state.palautteet.neutraali} yksikko="" />
-            <Statistic teksti="huono" arvo={this.state.palautteet.huono} yksikko="" />
-  
-            <div>
-              <Statistic teksti="keskiarvo" arvo={keskiarvo()} yksikko="" />
-              <Statistic teksti="positiivisia" arvo={positiivisia()} yksikko="%" />
-            </div>
+
+            <table>
+              <thead>
+              </thead>
+              <tbody>
+                <Statistic teksti="hyvä" arvo={this.state.palautteet.hyva} yksikko="" />
+                <Statistic teksti="neutraali" arvo={this.state.palautteet.neutraali} yksikko="" />
+                <Statistic teksti="huono" arvo={this.state.palautteet.huono} yksikko="" />
+                <Statistic teksti="keskiarvo" arvo={keskiarvo()} yksikko="" />
+                <Statistic teksti="positiivisia" arvo={positiivisia()} yksikko="%" />
+              </tbody>
+            </table>
+
           </div>
   
         )
