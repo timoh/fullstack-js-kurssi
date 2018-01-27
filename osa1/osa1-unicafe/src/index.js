@@ -3,44 +3,39 @@ import ReactDOM from 'react-dom'
 
 class App extends React.Component {
 
-  klikHyva = () => {
-    this.setState({
-      hyva: this.state.hyva + 1
-    })
-  }
+  klikPainike = (event) => { 
+    const key = event.target.id
 
-  klikNeutraali = () => {
-    this.setState({
-      neutraali: this.state.neutraali + 1
-    })
-  }
+    let uudetPalautteet = this.state.palautteet
+    uudetPalautteet[key] = uudetPalautteet[key] + 1
 
-  klikHuono = () => {
-    this.setState({
-      huono: this.state.huono + 1
-    })
-  }
+    this.setState({ palautteet: uudetPalautteet })
+    // console.log(this.state.palautteet)
+   }
 
   constructor(props) {
     super(props)
     this.state = {
-      hyva: 0,
-      neutraali: 0,
-      huono: 0
+      palautteet : {
+        hyva: 0,
+        neutraali: 0,
+        huono: 0
+      }
     }
   }
 
-
   render() {
+
+
 
     const Button = () => {
 
       return (
         <div>
           <h1>anna palautetta</h1>
-          <button onClick={this.klikHyva}>hyvä</button>
-          <button onClick={this.klikNeutraali}>neutraali</button>
-          <button onClick={this.klikHuono}>huono</button>
+          <button id="hyva" onClick={this.klikPainike}>hyvä</button>
+          <button id="neutraali" onClick={this.klikPainike}>neutraali</button>
+          <button id="huono" onClick={this.klikPainike}>huono</button>
         </div>
       )
     
@@ -49,8 +44,8 @@ class App extends React.Component {
     const Statistics = () => {
 
 
-      const summa = () => 1*this.state.hyva + 0*this.state.neutraali + -1*this.state.huono
-      const lkm = () => this.state.hyva + this.state.neutraali + this.state.huono
+      const summa = () => 1*this.state.palautteet.hyva + 0*this.state.palautteet.neutraali + -1*this.state.palautteet.huono
+      const lkm = () => this.state.palautteet.hyva + this.state.palautteet.neutraali + this.state.palautteet.huono
       
       const keskiarvo = () => {
         if (lkm() === 0) {
@@ -64,7 +59,7 @@ class App extends React.Component {
         if (lkm() === 0) {
           return 0
         } else {
-          return Number.parseFloat(this.state.hyva/lkm()*100).toPrecision(3)
+          return Number.parseFloat(this.state.palautteet.hyva/lkm()*100).toPrecision(3)
         }
       }
 
@@ -90,9 +85,9 @@ class App extends React.Component {
         return (
           <div>
             <h2>statistiikka</h2>
-            <Statistic teksti="hyvä" arvo={this.state.hyva} yksikko="" />
-            <Statistic teksti="neutraali" arvo={this.state.neutraali} yksikko="" />
-            <Statistic teksti="huono" arvo={this.state.huono} yksikko="" />
+            <Statistic teksti="hyvä" arvo={this.state.palautteet.hyva} yksikko="" />
+            <Statistic teksti="neutraali" arvo={this.state.palautteet.neutraali} yksikko="" />
+            <Statistic teksti="huono" arvo={this.state.palautteet.huono} yksikko="" />
   
             <div>
               <Statistic teksti="keskiarvo" arvo={keskiarvo()} yksikko="" />
