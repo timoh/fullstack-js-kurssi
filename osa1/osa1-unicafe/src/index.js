@@ -33,7 +33,7 @@ class App extends React.Component {
 
   render() {
 
-    const AnnaPalautetta = () => {
+    const Button = () => {
 
       return (
         <div>
@@ -46,7 +46,7 @@ class App extends React.Component {
     
     }
   
-    const Statistiikka = () => {
+    const Statistics = () => {
 
 
       const summa = () => 1*this.state.hyva + 0*this.state.neutraali + -1*this.state.huono
@@ -67,17 +67,25 @@ class App extends React.Component {
           return Number.parseFloat(this.state.hyva/lkm()*100).toPrecision(3)
         }
       }
+
+      const Statistic = (props) => { 
+
+          return(
+            <p>{props.teksti} {props.arvo} {props.yksikko}</p>
+          )
+
+      }
   
       return (
         <div>
           <h2>statistiikka</h2>
-          <p>hyvä {this.state.hyva}</p>
-          <p>neutraali {this.state.neutraali}</p>
-          <p>huono {this.state.huono}</p>
+          <Statistic teksti="hyvä" arvo={this.state.hyva} yksikko="" />
+          <Statistic teksti="neutraali" arvo={this.state.neutraali} yksikko="" />
+          <Statistic teksti="huono" arvo={this.state.huono} yksikko="" />
 
           <div>
-            <p>keskiarvo {keskiarvo()}</p>
-            <p>positiivisia {positiivisia()} %</p>
+            <Statistic teksti="keskiarvo" arvo={keskiarvo()} yksikko="" />
+            <Statistic teksti="positiivisia" arvo={positiivisia()} yksikko="%" />
           </div>
         </div>
 
@@ -88,8 +96,8 @@ class App extends React.Component {
   
     return (
       <div>
-        <AnnaPalautetta />
-        <Statistiikka />
+        <Button />
+        <Statistics />
       </div>
     )
 
