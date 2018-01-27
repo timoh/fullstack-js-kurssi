@@ -19,11 +19,18 @@ const App = () => {
   }
 
   const Sisalto = (props) => {
+
+    const Osa = (props) => {
+      return(
+        <p>{props.osa} {props.tehtava}</p>
+      )
+    }
+
     return(
       <div>
-        <p>{props.osa1} {props.tehtavia1}</p>
-        <p>{props.osa2} {props.tehtavia2}</p>
-        <p>{props.osa3} {props.tehtavia3}</p>
+        <Osa osa={props.osa1} tehtava={props.tehtavia1} />
+        <Osa osa={props.osa2} tehtava={props.tehtavia2} />
+        <Osa osa={props.osa3} tehtava={props.tehtavia3} />
       </div>
     )
   }
