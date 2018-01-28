@@ -7,7 +7,8 @@ class App extends React.Component {
         super(props)
         this.state = {
             countries: [],
-            filter: ''
+            filter: '',
+            selected: ''
         }
     }
 
@@ -21,6 +22,11 @@ class App extends React.Component {
 
     filterChange = (e) => {
         this.setState({filter: e.target.value})
+        this.setState({selected: ''})
+    }
+
+    handleCountryClick = (e) => {
+        this.setState({selected: e.target.id})
     }
 
     render() {
@@ -28,7 +34,7 @@ class App extends React.Component {
             <div>
                 find countries <input value={this.state.filter} onChange={this.filterChange} />
 
-                <Countries filter={this.state.filter} countries={this.state.countries} />
+                <Countries filter={this.state.filter} countries={this.state.countries} selected={this.state.selected} handleCountryClick={this.handleCountryClick}/>
             </div>
 
         )
@@ -38,7 +44,7 @@ class App extends React.Component {
 const Countries = (props) => {
 
     const filter = props.filter
-
+    const selected = props.selected
 
     if (filter.length > 0 && filter.length <= 10) {
 
@@ -50,7 +56,7 @@ const Countries = (props) => {
             return (
                 <div>too many matches, specify another filter</div>
             )
-        } else if (matchCount === 1) {
+        } else if (matchCount === 1 || selected) { 
 
             const country = props.countries.filter(country => matcher.test(country.name))[0]
 
@@ -66,7 +72,7 @@ const Countries = (props) => {
         else {
             return (
                 <div>
-                    {props.countries.filter(country => matcher.test(country.name)).map(country => <div key={country.alpha3Code}>{country.name}</div>)}
+                    {props.countries.filter(country => matcher.test(country.name)).map(country => <div id={country.alpha3Code} key={country.alpha3Code} onClick={props.handleCountryClick}>{country.name}</div>)}
                 </div>
             )
         }
