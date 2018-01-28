@@ -20,6 +20,14 @@ class App extends React.Component {
       })
   }
 
+  putNewPerson = (newPerson) => {
+    axios
+    .post('http://localhost:3001/persons', newPerson)
+    .then(response => {
+      console.log("response:", response)
+    })
+  }
+
   nameChange = (e) => {
     this.setState({ newName: e.target.value })
   }
@@ -55,6 +63,8 @@ class App extends React.Component {
         newName: '',
         newNumber: ''
       })
+
+      this.putNewPerson(newPerson)
     }
 
   }
