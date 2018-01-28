@@ -13,6 +13,10 @@ class App extends React.Component {
   }
 
   componentWillMount() {
+    this.getAllPeople()
+  }
+
+  getAllPeople() {
     personsService
     .getAll()
     .then(response => {
@@ -24,7 +28,20 @@ class App extends React.Component {
     personsService
     .create(newPerson)
     .then(response => {
-      // console.log("response:", response)
+      
+      const id = response.data.id
+      const newPersonWithId = {...newPerson, id}
+      this.updatePersonList(newPersonWithId)
+    })
+  }
+
+  updatePersonList = (newPersonWithId) => {
+    const updatedPersons = this.state.persons.concat(newPersonWithId)
+
+    this.setState({
+      persons: updatedPersons,
+      newName: '',
+      newNumber: ''
     })
   }
 
@@ -54,17 +71,9 @@ class App extends React.Component {
       })
       alert("Löytyy jo!")
     } else {
-      const newPerson = { name: newName, number: newNumber }
+      const newPersonWithoutId = { name: newName, number: newNumber }
 
-      const persons = this.state.persons.concat(newPerson)
-
-      this.setState({
-        persons: persons,
-        newName: '',
-        newNumber: ''
-      })
-
-      this.putNewPerson(newPerson)
+      this.putNewPerson(newPersonWithoutId)
     }
 
   }
@@ -73,12 +82,36 @@ class App extends React.Component {
     this.setState({ filter: e.target.value })
   }
 
+  deletePerson = (id) => {
+    personsService
+    .del(id)
+    .then(response => {
+      this.getAllPeople()
+    }).catch(error => {
+      console.log('Deletion failed..')
+    })
+  }
+
+  handleDelete = (e) => {
+    const id = e.target.id
+    const message = `are you sure you want to delete person number ${id}`
+    const result = window.confirm(message);
+    if (result === true) {
+      this.deletePerson(id)
+      console.log("Deleted person ", id)
+    } else {
+      console.log("Not deleted, as requested.")
+    }
+    
+   
+  }
+
   render() {
     return (
       <div>
         <Rajaus filter={this.state.filter} filterChange={this.filterChange} />
         <Lomake state={this.state} submitForm={this.submitForm} nameChange={this.nameChange} numberChange={this.numberChange} />
-        <Numerot state={this.state} />
+        <Numerot state={this.state} handleDelete={this.handleDelete} />
       </div>
     )
   }
@@ -129,7 +162,11 @@ const Numerot = (props) => {
         <h3>Numerot</h3>
         <table>
           <tbody>
-            {props.state.persons.filter(person => matcher.test(person.name)).map(person => <tr key={person.number}><td>{person.name}</td><td>{person.number}</td></tr>)}
+            {props.state.persons
+            .filter(person => 
+              matcher.test(person.name))
+            .map(person => 
+              <tr key={person.number}><td>{person.name}</td><td>{person.number}</td></tr>)}
           </tbody>
         </table>
       </div>
@@ -141,7 +178,13 @@ const Numerot = (props) => {
         <h3>Numerot</h3>
         <table>
           <tbody>
-            {props.state.persons.map(person => <tr key={person.name}><td>{person.name}</td><td>{person.number}</td></tr>)}
+            {props.state.persons
+            .map(person => 
+              <tr key={person.name}>
+                <td>{person.name}</td>
+                <td>{person.number}</td>
+                <td><button id={person.id} onClick={props.handleDelete}>poista</button></td>
+              </tr>)}
           </tbody>
         </table>
       </div>
