@@ -8,7 +8,8 @@ class App extends React.Component {
         { name: 'Arto Hellas', number: '040-123456' }
       ],
       newName: '',
-      newNumber: ''
+      newNumber: '',
+      filter: ''
     }
   }
 
@@ -51,23 +52,52 @@ class App extends React.Component {
     this.setState({newNumber: e.target.value})
   }
 
+  filterChange = (e) => {
+    this.setState({filter: e.target.value})
+  }
+
   render() {
 
     const Numerot = () => {
-      return(
-        <div>
+
+      const filter = this.state.filter
+
+      if (filter.length > 0) {
+
+        const matcher = new RegExp(filter, "i")
+
+        return(
+          <div>
             <table>
               <tbody>
-                {this.state.persons.map(person => <tr key={person.name}><td>{person.name}</td><td>{person.number}</td></tr>)}
+                {this.state.persons.filter(person => matcher.test(person.name)).map(person => <tr key={person.number}><td>{person.name}</td><td>{person.number}</td></tr>)}
               </tbody>
             </table>
-        </div>
-      )
+           </div>
+        )
+
+      } else {
+        return(
+          <div>
+            <table>
+              <tbody>
+                {this.state.persons.map(person => <tr key={person.number}><td>{person.name}</td><td>{person.number}</td></tr>)}
+              </tbody>
+            </table>
+           </div>
+        )
+      }
+
     }
 
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+        <div>
+          rajaa näytettäviä <input value={this.state.filter} onChange={this.filterChange} />
+        </div>
+        
+        <h3>Lisää uusi</h3>
         <form onSubmit={this.submitForm}>
           <div>
             nimi: <input value={this.state.newName} onChange={this.nameChange} />
@@ -79,8 +109,9 @@ class App extends React.Component {
             <button type="submit">lisää</button>
           </div>
         </form>
-        <h2>Numerot</h2>
-        <Numerot />
+
+      <h3>Numerot</h3>
+      <Numerot />
       </div>
     )
   }
