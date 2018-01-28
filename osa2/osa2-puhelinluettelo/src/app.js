@@ -5,9 +5,10 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas' }
+        { name: 'Arto Hellas', number: '040-123456' }
       ],
-      newName: ''
+      newName: '',
+      newNumber: ''
     }
   }
 
@@ -15,6 +16,7 @@ class App extends React.Component {
     e.preventDefault()
 
     const newName = this.state.newName
+    const newNumber = this.state.newNumber
     const match = this.state.persons.find(function(element){
       return (newName === element['name'])
     })
@@ -23,17 +25,19 @@ class App extends React.Component {
 
     if (match) {
       this.setState({
-        newName: ''
+        newName: '',
+        newNumber: ''
       })
       alert("Löytyy jo!")
     } else {
-      const newPerson = {name: newName}
+      const newPerson = {name: newName, number: newNumber}
 
       const persons = this.state.persons.concat(newPerson)
   
       this.setState({
         persons: persons,
-        newName: ''
+        newName: '',
+        newNumber: ''
       })
     }
 
@@ -43,12 +47,20 @@ class App extends React.Component {
     this.setState({newName: e.target.value})
   }
 
+  numberChange = (e) => {
+    this.setState({newNumber: e.target.value})
+  }
+
   render() {
 
     const Numerot = () => {
       return(
         <div>
-            {this.state.persons.map(person => <p key={person.name}>{person.name}</p>)}
+            <table>
+              <tbody>
+                {this.state.persons.map(person => <tr key={person.name}><td>{person.name}</td><td>{person.number}</td></tr>)}
+              </tbody>
+            </table>
         </div>
       )
     }
@@ -59,6 +71,9 @@ class App extends React.Component {
         <form onSubmit={this.submitForm}>
           <div>
             nimi: <input value={this.state.newName} onChange={this.nameChange} />
+          </div>
+          <div>
+            numero: <input value={this.state.newNumber} onChange={this.numberChange} />
           </div>
           <div>
             <button type="submit">lisää</button>
