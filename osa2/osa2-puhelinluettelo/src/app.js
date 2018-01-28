@@ -14,13 +14,11 @@ class App extends React.Component {
   }
 
   nameChange = (e) => {
-    console.log("Name change:")
-    console.log(this)
-    this.state.setState({ newName: e.target.value })
+    this.setState({ newName: e.target.value })
   }
 
   numberChange = (e) => {
-    this.state.setState({ newNumber: e.target.value })
+    this.setState({ newNumber: e.target.value })
   }
 
   submitForm = (e) => {
@@ -45,7 +43,7 @@ class App extends React.Component {
 
       const persons = this.state.persons.concat(newPerson)
 
-      this.state.setState({
+      this.setState({
         persons: persons,
         newName: '',
         newNumber: ''
@@ -61,11 +59,8 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Rajaus filtteri={this.state.filter} />
-
-        <Lomake state={this.state} nameChange={this.nameChange} numberChange={this.numberChange} />
-
-        <h3>Numerot</h3>
+        <Rajaus filter={this.state.filter} filterChange={this.filterChange} />
+        <Lomake state={this.state} submitForm={this.submitForm} nameChange={this.nameChange} numberChange={this.numberChange} />
         <Numerot state={this.state} />
       </div>
     )
@@ -74,13 +69,11 @@ class App extends React.Component {
 
 const Rajaus = (props) => {
 
-
-
   return (
     <div>
       <h2>Puhelinluettelo</h2>
       <div>
-        rajaa näytettäviä <input value={props.filtteri} onChange={this.filterChange} />
+        rajaa näytettäviä <input value={props.filter} onChange={props.filterChange} />
       </div>
     </div>
   )
@@ -88,13 +81,10 @@ const Rajaus = (props) => {
 
 const Lomake = (props) => {
 
-  console.log(props.state)
-  console.log(props.nameChange)
-
   return (
     <div>
       <h3>Lisää uusi</h3>
-      <form onSubmit={this.submitForm}>
+      <form onSubmit={props.submitForm}>
         <div>
           nimi: <input value={props.state.newName} onChange={props.nameChange} />
         </div>
@@ -119,6 +109,7 @@ const Numerot = (props) => {
 
     return (
       <div>
+        <h3>Numerot</h3>
         <table>
           <tbody>
             {props.state.persons.filter(person => matcher.test(person.name)).map(person => <tr key={person.number}><td>{person.name}</td><td>{person.number}</td></tr>)}
@@ -130,6 +121,7 @@ const Numerot = (props) => {
   } else {
     return (
       <div>
+        <h3>Numerot</h3>
         <table>
           <tbody>
             {props.state.persons.map(person => <tr key={person.number}><td>{person.name}</td><td>{person.number}</td></tr>)}
