@@ -14,14 +14,29 @@ class App extends React.Component {
   submitForm = (e) => {
     e.preventDefault()
 
-    const newPerson = {name: this.state.newName}
-
-    const persons = this.state.persons.concat(newPerson)
-
-    this.setState({
-      persons: persons,
-      newName: ''
+    const newName = this.state.newName
+    const match = this.state.persons.find(function(element){
+      return (newName === element['name'])
     })
+
+    // console.log("match",match)
+
+    if (match) {
+      this.setState({
+        newName: ''
+      })
+      alert("Löytyy jo!")
+    } else {
+      const newPerson = {name: newName}
+
+      const persons = this.state.persons.concat(newPerson)
+  
+      this.setState({
+        persons: persons,
+        newName: ''
+      })
+    }
+
   }
 
   nameChange = (e) => {
