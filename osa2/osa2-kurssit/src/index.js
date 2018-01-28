@@ -25,6 +25,7 @@ const App = () => {
       <div>
         <Otsikko kurssi={props.kurssi['nimi']} />
         <Sisalto osat={props.kurssi['osat']} />
+        <Yhteensa osat={props.kurssi['osat']} />
       </div>
     )
   }
@@ -52,13 +53,17 @@ const App = () => {
     )
   }
 
-  // const Yhteensa = (props) => {
-  //   return(
-  //     <div>
-  //       <p>yhteensä {props.osat[0]['tehtavia'] + props.osat[1]['tehtavia'] + props.osat[2]['tehtavia']} tehtävää</p>
-  //     </div>
-  //   )
-  // }
+  const Yhteensa = (props) => {
+
+    const reducer = (acc, currVal) => acc + currVal
+    let tehtavia = props.osat.map(osa => osa.tehtavia).reduce(reducer)
+
+    return(
+      <div>
+        <p>yhteensä {tehtavia} tehtävää</p>
+      </div>
+    )
+  }
 
   return (
     <div>
