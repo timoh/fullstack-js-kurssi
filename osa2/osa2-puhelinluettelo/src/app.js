@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios'
+import personsService from './services/persons'
 
 class App extends React.Component {
   constructor(props) {
@@ -13,18 +13,18 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        this.setState({ persons: response.data })
-      })
+    personsService
+    .getAll()
+    .then(response => {
+      this.setState({ persons: response.data })
+    })
   }
 
   putNewPerson = (newPerson) => {
-    axios
-    .post('http://localhost:3001/persons', newPerson)
+    personsService
+    .create(newPerson)
     .then(response => {
-      console.log("response:", response)
+      // console.log("response:", response)
     })
   }
 
@@ -141,7 +141,7 @@ const Numerot = (props) => {
         <h3>Numerot</h3>
         <table>
           <tbody>
-            {props.state.persons.map(person => <tr key={person.number}><td>{person.name}</td><td>{person.number}</td></tr>)}
+            {props.state.persons.map(person => <tr key={person.name}><td>{person.name}</td><td>{person.number}</td></tr>)}
           </tbody>
         </table>
       </div>
