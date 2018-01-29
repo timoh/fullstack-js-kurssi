@@ -1,0 +1,27 @@
+.ilmoitus-warning {
+    background: red;
+    color: white;
+    border: 1px black solid;
+    padding: 10px;
+    margin-bottom:1.5em;
+    margin-top:1em;
+    width: 10em;
+}
+
+.ilmoitus-success {
+    background: lightgreen;
+    border: 1px black solid;
+    padding: 10px;
+    margin-bottom:1.5em;
+    margin-top:1em;
+    width: 10em;
+}
+
+.ilmoitus-info {
+    background: lightgray;
+    border: 1px black solid;
+    padding: 10px;
+    margin-bottom:1.5em;
+    margin-top:1em;
+    width: 10em;
+}

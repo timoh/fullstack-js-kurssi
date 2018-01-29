@@ -1,5 +1,6 @@
 import React from 'react';
 import personsService from './services/persons'
+import './style.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -8,7 +9,8 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filter: ''
+      filter: '',
+      msg: ''
     }
   }
 
@@ -32,6 +34,8 @@ class App extends React.Component {
       const id = response.data.id
       const newPersonWithId = {...newPerson, id}
       this.updatePersonList(newPersonWithId)
+    }).then(e => {
+      this.flashMsg("Created person!")
     })
   }
 
@@ -40,6 +44,8 @@ class App extends React.Component {
     .update(updatedPerson.id, updatedPerson)
     .then(response => {
       this.updatePersonList(updatedPerson)
+    }).then(e => {
+      this.flashMsg("Updated person!")
     })
   }
 
@@ -118,6 +124,8 @@ class App extends React.Component {
       this.getAllPeople()
     }).catch(error => {
       console.log('Deletion failed..')
+    }).then(e => {
+      this.flashMsg("Deleted person!")
     })
   }
 
@@ -127,7 +135,7 @@ class App extends React.Component {
     const result = window.confirm(message);
     if (result === true) {
       this.deletePerson(id)
-      console.log("Deleted person ", id)
+      // console.log("Deleted person ", id)
     } else {
       console.log("Not deleted, as requested.")
     }
@@ -135,9 +143,18 @@ class App extends React.Component {
    
   }
 
+  flashMsg = (msg) => {
+    this.setState({msg})
+    
+    const hideMsg = () => this.setState({msg: ''})
+    setTimeout(hideMsg,5000)
+  }
+
   render() {
     return (
       <div>
+        <h2>Puhelinluettelo</h2>
+        <Ilmoitus msg={this.state.msg}/>
         <Rajaus filter={this.state.filter} filterChange={this.filterChange} />
         <Lomake state={this.state} submitForm={this.submitForm} nameChange={this.nameChange} numberChange={this.numberChange} />
         <Numerot state={this.state} handleDelete={this.handleDelete} />
@@ -146,11 +163,26 @@ class App extends React.Component {
   }
 }
 
+const Ilmoitus = (props) => {
+  if (props.msg.length > 0) {
+    return(
+      <div className="ilmoitus-success">
+        {props.msg}
+      </div>
+    )
+  } else {
+    return(
+      <div>
+      </div>
+    )
+  }
+
+}
+
 const Rajaus = (props) => {
 
   return (
     <div>
-      <h2>Puhelinluettelo</h2>
       <div>
         rajaa näytettäviä <input value={props.filter} onChange={props.filterChange} />
       </div>
