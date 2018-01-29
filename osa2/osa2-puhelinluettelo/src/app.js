@@ -24,7 +24,7 @@ class App extends React.Component {
     })
   }
 
-  putNewPerson = (newPerson) => {
+  createNewPerson = (newPerson) => {
     personsService
     .create(newPerson)
     .then(response => {
@@ -35,14 +35,16 @@ class App extends React.Component {
     })
   }
 
-  updatePersonList = (newPersonWithId) => {
-    const updatedPersons = this.state.persons.concat(newPersonWithId)
-
-    this.setState({
-      persons: updatedPersons,
-      newName: '',
-      newNumber: ''
+  updatePerson = (updatedPerson) => {
+    personsService
+    .update(updatedPerson.id, updatedPerson)
+    .then(response => {
+      this.updatePersonList(updatedPerson)
     })
+  }
+
+  updatePersonList = () => {
+    this.getAllPeople()
   }
 
   nameChange = (e) => {
@@ -51,6 +53,10 @@ class App extends React.Component {
 
   numberChange = (e) => {
     this.setState({ newNumber: e.target.value })
+  }
+
+  getPerson = (id) => {
+    return personsService.get(id)
   }
 
   submitForm = (e) => {
@@ -65,16 +71,39 @@ class App extends React.Component {
     // console.log("match",match)
 
     if (match) {
-      this.setState({
-        newName: '',
-        newNumber: ''
-      })
-      alert("Löytyy jo!")
+
+      if (!newNumber || newNumber.length <= 0) {
+        // case: ei numeroa
+        alert("Löytyy jo!")
+      } else {
+        // case: korvataan / lisätään numero
+
+        this.getPerson(match.id).then(response => {
+          const oldPerson = response.data
+
+          const newPerson = { name: oldPerson.name, number: newNumber, id: oldPerson.id }
+
+          const message = `Person ${newPerson.name} already exists, do you want to replace their number?`
+          const result = window.confirm(message);
+          if (result === true) {
+            this.updatePerson(newPerson)
+            console.log("Updated person ", newPerson.id)
+          } else {
+            console.log("Not updated, as requested.")
+          }        
+        })
+      }
+
     } else {
       const newPersonWithoutId = { name: newName, number: newNumber }
 
-      this.putNewPerson(newPersonWithoutId)
+      this.createNewPerson(newPersonWithoutId)
     }
+
+    this.setState({
+      newName: '',
+      newNumber: ''
+    })
 
   }
 
