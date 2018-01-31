@@ -44,8 +44,10 @@ class App extends React.Component {
     .update(updatedPerson.id, updatedPerson)
     .then(response => {
       this.updatePersonList(updatedPerson)
-    }).then(e => {
+    }).then (e => {
       this.flashMsg("Updated person!")
+    }).catch(error => {
+      this.flashMsg("The person you tried to edit does not exist! Perhaps it was deleted after you initially loaded the page..")
     })
   }
 
@@ -62,7 +64,9 @@ class App extends React.Component {
   }
 
   getPerson = (id) => {
-    return personsService.get(id)
+    return personsService.get(id).catch(error => {
+      this.flashMsg("The person you tried to edit does not exist! Perhaps it was deleted after you initially loaded the page..")
+    })
   }
 
   submitForm = (e) => {
@@ -85,18 +89,25 @@ class App extends React.Component {
         // case: korvataan / lisätään numero
 
         this.getPerson(match.id).then(response => {
-          const oldPerson = response.data
+          if (response) {
+            const oldPerson = response.data
 
-          const newPerson = { name: oldPerson.name, number: newNumber, id: oldPerson.id }
-
-          const message = `Person ${newPerson.name} already exists, do you want to replace their number?`
-          const result = window.confirm(message);
-          if (result === true) {
-            this.updatePerson(newPerson)
-            console.log("Updated person ", newPerson.id)
+            const newPerson = { name: oldPerson.name, number: newNumber, id: oldPerson.id }
+  
+            const message = `Person ${newPerson.name} already exists, do you want to replace their number?`
+            const result = window.confirm(message);
+            if (result === true) {
+              this.updatePerson(newPerson)
+              console.log("Updated person ", newPerson.id)
+            } else {
+              console.log("Not updated, as requested.")
+            } 
           } else {
-            console.log("Not updated, as requested.")
-          }        
+            this.flashMsg("The person you tried to edit does not exist! Perhaps it was deleted after you initially loaded the page..")
+          }
+       
+        }).catch(error => {
+          this.flashMsg("The person you tried to edit does not exist! Perhaps it was deleted after you initially loaded the page..")
         })
       }
 
